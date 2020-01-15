@@ -1,0 +1,9 @@
+bin/
+obj/
+Address_book.txt
+ksiazka_i_logowanie.mm
+ksiazka_logowanie.cbp
+ksiazka_logowanie.depend
+ksiazka_logowanie.layout
+users.txt
+optymalizacja_txt/
