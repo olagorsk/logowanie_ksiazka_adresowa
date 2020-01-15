@@ -48,7 +48,7 @@ int editContact (vector <AddressBook> &contacts, int numberOfContacts);
 
 void editTextFileContacts (vector <AddressBook> contacts, int i);
 
-void editTextFileContacts (vector <AddressBook> contacts, int i, int contactToChange, string whatToDo);
+int editTextFileContacts (vector <AddressBook> contacts, int i, int contactToChange, string whatToDo);
 
 void printContact (vector <AddressBook> contacts, int i);
 
@@ -509,13 +509,10 @@ int eraseContact(vector <AddressBook> &contacts, int numberOfContacts, int &last
             sign = getch();
             if (sign == 't')
             {
-                if (lastID == contacts[i].id)
-                    lastID--;
-
                 contacts.erase(contacts.begin()+ i);
                 numberOfContacts--;
 
-                editTextFileContacts(contacts, i, contactIDtoErase, whatToDo);
+                lastID = editTextFileContacts(contacts, i, contactIDtoErase, whatToDo);
                 cout<<"Kontakt usunieto";
                 Sleep(1500);
             }
@@ -633,17 +630,17 @@ int editContact (vector <AddressBook> &contacts, int numberOfContacts)
     }
 }
 
-void editTextFileContacts (vector <AddressBook> contacts, int i, int contactToChange, string whatToDo)
+int editTextFileContacts (vector <AddressBook> contacts, int i, int contactToChange, string whatToDo)
 {
     fstream file, fileTemp;
     file.open("Address_book.txt", ios::in);
     fileTemp.open ("Address_book_temp.txt", ios::out);
-
+    int lastID =0;
     int tempId, tempIdUser;
     string tempName, tempSurname, tempPhone, tempMail, tempAddress;
 
     string line;
-    //file.clear();
+
     if (file.good() == true)
     {
         while (getline(file, line))
@@ -663,6 +660,7 @@ void editTextFileContacts (vector <AddressBook> contacts, int i, int contactToCh
                     fileTemp<< contacts[i].id<<"|"<<contacts[i].idUser<<"|"\
                             <<contacts[i].name<<"|"<<contacts[i].surname<<"|"\
                             <<contacts[i].phone<<"|"<<contacts[i].mail<<"|"<<contacts[i].address<<"|"<<endl;
+                    lastID = tempId;
                     break;
                 }
                 else
@@ -683,6 +681,7 @@ void editTextFileContacts (vector <AddressBook> contacts, int i, int contactToCh
 
                     fileTemp<< tempId<<"|"<<tempIdUser<<"|"<<tempName<<"|"\
                             <<tempSurname<<"|"<<tempPhone<<"|"<<tempMail<<"|"<<tempAddress<<"|"<<endl;
+                    lastID = tempId;
                 }
             }
         }
@@ -697,6 +696,7 @@ void editTextFileContacts (vector <AddressBook> contacts, int i, int contactToCh
 
     remove("Address_book.txt") ;
     rename("Address_book_temp.txt", "Address_book.txt");
+    return lastID;
 }
 
 void printContact (vector <AddressBook> contacts, int i)
